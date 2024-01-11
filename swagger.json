@@ -1,0 +1,2634 @@
+{
+  "openapi": "3.0.0",
+  "servers": [
+    {
+      "url": "https://umbra-canopy-test.us.auth0.com/"
+    }
+  ],
+  "info": {
+    "title": "umbra-canopy-test.us.auth0.com",
+    "version": "2"
+  },
+  "paths": {
+    "/api/v2/organizations": {
+      "get": {
+        "operationId": "get_organizations",
+        "summary": "Get organizations",
+        "description": "List available organizations. This endpoint supports two types of pagination:\n- Offset pagination\n- Checkpoint pagination\n\nCheckpoint pagination must be used if you need to retrieve more than 1000 organizations.\n\n<h2>Checkpoint Pagination</h2>\n\nTo search by checkpoint, use the following parameters:\n- from: Optional id from which to start selection.\n- take: The total amount of entries to retrieve when using the from parameter. Defaults to 50.\n\nNote: The first time you call this endpoint using Checkpoint Pagination, you should omit the <code>from</code> parameter. If there are more results, a <code>next</code> value will be included in the response. You can use this for subsequent API calls. When <code>next</code> is no longer included in the response, this indicates there are no more pages remaining.\n",
+        "parameters": [
+          {
+            "in": "query",
+            "description": "Page index of the results to return. First page is 0.",
+            "name": "page",
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 1000
+            }
+          },
+          {
+            "in": "query",
+            "description": "Number of results per page. Defaults to 50.",
+            "name": "per_page",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100
+            }
+          },
+          {
+            "in": "query",
+            "description": "Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).",
+            "name": "include_totals",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "in": "query",
+            "description": "Optional Id from which to start selection.",
+            "name": "from",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "description": "Number of results per page. Defaults to 50.",
+            "name": "take",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100
+            }
+          },
+          {
+            "in": "query",
+            "description": "Field to sort by. Use <code>field:order</code> where order is <code>1</code> for ascending and <code>-1</code> for descending. e.g. <code>created_at:1</code>. We currently support sorting by the following fields: <code>name</code>, <code>display_name</code> and <code>created_at</code>.",
+            "name": "sort",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Organizations successfully retrieved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/get_organizations_response"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid query string paging options. The message will vary depending on the cause"
+          },
+          "401": {
+            "description": "Client is not global."
+          },
+          "403": {
+            "description": "Insufficient scope; expected any of: read:organizations."
+          },
+          "429": {
+            "description": "Too many requests. Check the X-RateLimit-Limit, X-RateLimit-Remaining and X-RateLimit-Reset headers."
+          }
+        },
+        "security": [
+          {
+            "jwt": []
+          }
+        ]
+      },
+      "post": {
+        "operationId": "post_organizations",
+        "summary": "Create an Organization",
+        "description": "Create an organization\n",
+        "responses": {
+          "200": {
+            "description": "No response was specified",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/post_organizations_response"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Organization successfully created."
+          },
+          "400": {
+            "description": "Invalid request body. The message will vary depending on the cause."
+          },
+          "401": {
+            "description": "Client is not global."
+          },
+          "403": {
+            "description": "Insufficient scope; expected any of: create:organizations."
+          },
+          "409": {
+            "description": "An organization with this name already exists."
+          },
+          "429": {
+            "description": "Too many requests. Check the X-RateLimit-Limit, X-RateLimit-Remaining and X-RateLimit-Reset headers."
+          }
+        },
+        "security": [
+          {
+            "jwt": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/post_organizations_body"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/post_organizations_body"
+              }
+            }
+          },
+          "required": true
+        }
+      }
+    },
+    "/api/v2/organizations/{id}": {
+      "get": {
+        "operationId": "get_organizations_by_id",
+        "summary": "Get organization",
+        "description": "Get a specific organization\n",
+        "parameters": [
+          {
+            "in": "path",
+            "description": "ID of the organization to retrieve.",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Organization successfully retrieved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/get_organizations_by_id_response"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request query string. The message will vary depending on the cause."
+          },
+          "401": {
+            "description": "Client is not global."
+          },
+          "403": {
+            "description": "Insufficient scope; expected any of: read:organizations."
+          },
+          "429": {
+            "description": "Too many requests. Check the X-RateLimit-Limit, X-RateLimit-Remaining and X-RateLimit-Reset headers."
+          }
+        },
+        "security": [
+          {
+            "jwt": []
+          }
+        ]
+      },
+      "delete": {
+        "operationId": "delete_organizations_by_id",
+        "summary": "Delete organization",
+        "description": "Delete a specific organization\n",
+        "parameters": [
+          {
+            "in": "path",
+            "description": "Organization identifier",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "No response was specified"
+          },
+          "204": {
+            "description": "The organization was deleted."
+          },
+          "400": {
+            "description": "Invalid request URI. The message will vary depending on the cause."
+          },
+          "401": {
+            "description": "Invalid signature received for JSON Web Token validation."
+          },
+          "403": {
+            "description": "Insufficient scope; expected any of: delete:organizations."
+          },
+          "404": {
+            "description": "The organization does not exist."
+          },
+          "429": {
+            "description": "Too many requests. Check the X-RateLimit-Limit, X-RateLimit-Remaining and X-RateLimit-Reset headers."
+          }
+        },
+        "security": [
+          {
+            "jwt": []
+          }
+        ]
+      },
+      "patch": {
+        "operationId": "patch_organizations_by_id",
+        "summary": "Modify an Organization",
+        "description": "Modify an organization\n",
+        "parameters": [
+          {
+            "in": "path",
+            "description": "ID of the organization to update.",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Organization successfully updated.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/patch_organizations_by_id_response"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request body. The message will vary depending on the cause."
+          },
+          "401": {
+            "description": "Client is not global."
+          },
+          "403": {
+            "description": "Insufficient scope; expected any of: update:organizations."
+          },
+          "429": {
+            "description": "Too many requests. Check the X-RateLimit-Limit, X-RateLimit-Remaining and X-RateLimit-Reset headers."
+          }
+        },
+        "security": [
+          {
+            "jwt": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/patch_organizations_by_id_body"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/patch_organizations_by_id_body"
+              }
+            }
+          },
+          "required": true
+        }
+      }
+    },
+    "/api/v2/organizations/name/{name}": {
+      "get": {
+        "operationId": "get_name_by_name",
+        "summary": "Get organization by name",
+        "description": "Get a specific organization by name\n",
+        "parameters": [
+          {
+            "in": "path",
+            "description": "name of the organization to retrieve.",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Organization successfully retrieved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/get_name_by_name_response"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request query string. The message will vary depending on the cause."
+          },
+          "401": {
+            "description": "Client is not global."
+          },
+          "403": {
+            "description": "Insufficient scope; expected any of: read:organizations."
+          },
+          "429": {
+            "description": "Too many requests. Check the X-RateLimit-Limit, X-RateLimit-Remaining and X-RateLimit-Reset headers."
+          }
+        },
+        "security": [
+          {
+            "jwt": []
+          }
+        ]
+      }
+    },
+    "/api/v2/organizations/{id}/enabled_connections": {
+      "get": {
+        "operationId": "get_enabled_connections",
+        "summary": "Get connections enabled for an organization",
+        "parameters": [
+          {
+            "in": "path",
+            "description": "Organization identifier",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "description": "Page index of the results to return. First page is 0.",
+            "name": "page",
+            "schema": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          {
+            "in": "query",
+            "description": "Number of results per page. Defaults to 50.",
+            "name": "per_page",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100
+            }
+          },
+          {
+            "in": "query",
+            "description": "Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).",
+            "name": "include_totals",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Connections successfully retrieved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/get_enabled_connections_response"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request query string. The message will vary depending on the cause."
+          },
+          "401": {
+            "description": "Client is not global."
+          },
+          "403": {
+            "description": "Insufficient scope; expected any of: read:organization_connections."
+          },
+          "429": {
+            "description": "Too many requests. Check the X-RateLimit-Limit, X-RateLimit-Remaining and X-RateLimit-Reset headers."
+          }
+        },
+        "security": [
+          {
+            "jwt": []
+          }
+        ]
+      },
+      "post": {
+        "operationId": "post_enabled_connections",
+        "summary": "Add connections to an organization",
+        "parameters": [
+          {
+            "in": "path",
+            "description": "Organization identifier",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "No response was specified",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/post_enabled_connections_response"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Organization connection successfully added."
+          },
+          "400": {
+            "description": "Invalid request body. The message will vary depending on the cause."
+          },
+          "401": {
+            "description": "Client is not global."
+          },
+          "403": {
+            "description": "Insufficient scope; expected any of: create:organization_connections."
+          },
+          "429": {
+            "description": "Too many requests. Check the X-RateLimit-Limit, X-RateLimit-Remaining and X-RateLimit-Reset headers."
+          }
+        },
+        "security": [
+          {
+            "jwt": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/post_enabled_connections_body"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/post_enabled_connections_body"
+              }
+            }
+          },
+          "required": true
+        }
+      }
+    },
+    "/api/v2/organizations/{id}/invitations": {
+      "get": {
+        "operationId": "get_invitations",
+        "summary": "Get invitations to organization",
+        "parameters": [
+          {
+            "in": "path",
+            "description": "Organization identifier",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "description": "Page index of the results to return. First page is 0.",
+            "name": "page",
+            "schema": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          {
+            "in": "query",
+            "description": "Number of results per page. Defaults to 50.",
+            "name": "per_page",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100
+            }
+          },
+          {
+            "in": "query",
+            "description": "When true, return results inside an object that also contains the start and limit.  When false (default), a direct array of results is returned.  We do not yet support returning the total invitations count.",
+            "name": "include_totals",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "in": "query",
+            "description": "Comma-separated list of fields to include or exclude (based on value provided for include_fields) in the result. Leave empty to retrieve all fields.",
+            "name": "fields",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "description": "Whether specified fields are to be included (true) or excluded (false). Defaults to true.",
+            "name": "include_fields",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "in": "query",
+            "description": "Field to sort by. Use field:order where order is 1 for ascending and -1 for descending Defaults to created_at:-1.",
+            "name": "sort",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Invitations successfully retrieved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/get_invitations_response"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Requesting page exceeds the allowed maximum of 1000 records"
+          },
+          "401": {
+            "description": "Invalid token."
+          },
+          "403": {
+            "description": "Insufficient scope; expected any of: read:organization_invitations."
+          },
+          "404": {
+            "description": "No organization found by that id."
+          },
+          "429": {
+            "description": "Too many requests. Check the X-RateLimit-Limit, X-RateLimit-Remaining and X-RateLimit-Reset headers."
+          }
+        },
+        "security": [
+          {
+            "jwt": []
+          }
+        ]
+      },
+      "post": {
+        "operationId": "post_invitations",
+        "summary": "Create invitations to organization",
+        "parameters": [
+          {
+            "in": "path",
+            "description": "Organization identifier",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Invitation successfully created.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/post_invitations_response"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The specified connection does not exist."
+          },
+          "401": {
+            "description": "Invalid token."
+          },
+          "403": {
+            "description": "Insufficient scope; expected any of: create:organization_invitations."
+          },
+          "404": {
+            "description": "No organization found by that id."
+          },
+          "429": {
+            "description": "Too many requests. Check the X-RateLimit-Limit, X-RateLimit-Remaining and X-RateLimit-Reset headers."
+          }
+        },
+        "security": [
+          {
+            "jwt": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/post_invitations_body"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/post_invitations_body"
+              }
+            }
+          },
+          "required": true
+        }
+      }
+    },
+    "/api/v2/organizations/{id}/members": {
+      "get": {
+        "operationId": "get_members",
+        "summary": "Get members who belong to an organization",
+        "description": "List organization members. \n\n<ul>\n  <li>\n    Use the <code>fields</code> parameter to optionally define the specific member details retrieved. If\n    <code>fields</code> is left blank, all fields (except roles) are returned.\n  </li>\n  <li>\n    Member roles are not sent by default. Use <code>fields=roles</code> to retrieve the roles assigned to each listed\n    member. To use this parameter, you must include the <code>read:organization_member_roles</code> scope in the token.\n  </li>\n</ul>\n\nThis endpoint supports two types of pagination:\n\n- Offset pagination \n- Checkpoint pagination\n\nCheckpoint pagination must be used if you need to retrieve more than 1000\norganization members.\n\n<h2>Checkpoint Pagination</h2>\n\nTo search by checkpoint, use the following parameters: - from: Optional id from which to start selection. - take: The\ntotal amount of entries to retrieve when using the from parameter. Defaults to 50. Note: The first time you call this\nendpoint using Checkpoint Pagination, you should omit the <code>from</code> parameter. If there are more results, a\n<code>next</code> value will be included in the response. You can use this for subsequent API calls. When\n<code>next</code> is no longer included in the response, this indicates there are no more pages remaining.\n",
+        "parameters": [
+          {
+            "in": "path",
+            "description": "Organization identifier",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "description": "Page index of the results to return. First page is 0.",
+            "name": "page",
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 1000
+            }
+          },
+          {
+            "in": "query",
+            "description": "Number of results per page. Defaults to 50.",
+            "name": "per_page",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100
+            }
+          },
+          {
+            "in": "query",
+            "description": "Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).",
+            "name": "include_totals",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "in": "query",
+            "description": "Optional Id from which to start selection.",
+            "name": "from",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "description": "Number of results per page. Defaults to 50.",
+            "name": "take",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100
+            }
+          },
+          {
+            "in": "query",
+            "description": "Comma-separated list of fields to include or exclude (based on value provided for include_fields) in the result. Leave empty to retrieve all fields.",
+            "name": "fields",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "description": "Whether specified fields are to be included (true) or excluded (false).",
+            "name": "include_fields",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Members successfully retrieved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/get_members_response"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid query string paging options. The message will vary depending on the cause"
+          },
+          "401": {
+            "description": "Client is not global."
+          },
+          "403": {
+            "description": "Insufficient scope; expected any of: read:organization_members, read:organization_member_roles."
+          },
+          "429": {
+            "description": "Too many requests. Check the X-RateLimit-Limit, X-RateLimit-Remaining and X-RateLimit-Reset headers."
+          }
+        },
+        "security": [
+          {
+            "jwt": []
+          }
+        ]
+      },
+      "delete": {
+        "operationId": "delete_members",
+        "summary": "Delete members from an organization",
+        "parameters": [
+          {
+            "in": "path",
+            "description": "Organization identifier",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "No response was specified"
+          },
+          "204": {
+            "description": "Users successfully removed from organization."
+          },
+          "400": {
+            "description": "Invalid request body. The message will vary depending on the cause."
+          },
+          "401": {
+            "description": "Client is not global."
+          },
+          "403": {
+            "description": "Insufficient scope; expected any of: delete:organization_members."
+          },
+          "429": {
+            "description": "Too many requests. Check the X-RateLimit-Limit, X-RateLimit-Remaining and X-RateLimit-Reset headers."
+          }
+        },
+        "security": [
+          {
+            "jwt": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/delete_members_body"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/delete_members_body"
+              }
+            }
+          },
+          "required": true
+        }
+      },
+      "post": {
+        "operationId": "post_members",
+        "summary": "Add members to an organization",
+        "parameters": [
+          {
+            "in": "path",
+            "description": "Organization identifier",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "No response was specified"
+          },
+          "204": {
+            "description": "Members successfully added to organization."
+          },
+          "400": {
+            "description": "Invalid request body. The message will vary depending on the cause."
+          },
+          "401": {
+            "description": "Client is not global."
+          },
+          "403": {
+            "description": "Insufficient scope; expected any of: create:organization_members."
+          },
+          "429": {
+            "description": "Too many requests. Check the X-RateLimit-Limit, X-RateLimit-Remaining and X-RateLimit-Reset headers."
+          }
+        },
+        "security": [
+          {
+            "jwt": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/post_members_body"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/post_members_body"
+              }
+            }
+          },
+          "required": true
+        }
+      }
+    },
+    "/api/v2/organizations/{id}/invitations/{invitation_id}": {
+      "get": {
+        "operationId": "get_invitations_by_invitation_id",
+        "summary": "Get an invitation to organization",
+        "parameters": [
+          {
+            "in": "path",
+            "description": "Organization identifier",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "description": "The id of the user invitation.",
+            "name": "invitation_id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "description": "Comma-separated list of fields to include or exclude (based on value provided for include_fields) in the result. Leave empty to retrieve all fields.",
+            "name": "fields",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "description": "Whether specified fields are to be included (true) or excluded (false). Defaults to true.",
+            "name": "include_fields",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Invitation successfully retrieved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/get_invitations_by_invitation_id_response"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request query string. The message will vary depending on the cause."
+          },
+          "401": {
+            "description": "Invalid token."
+          },
+          "403": {
+            "description": "Insufficient scope; expected any of: read:organization_invitations."
+          },
+          "404": {
+            "description": "The invitation does not exist."
+          },
+          "429": {
+            "description": "Too many requests. Check the X-RateLimit-Limit, X-RateLimit-Remaining and X-RateLimit-Reset headers."
+          }
+        },
+        "security": [
+          {
+            "jwt": []
+          }
+        ]
+      },
+      "delete": {
+        "operationId": "delete_invitations_by_invitation_id",
+        "summary": "Delete an invitation to organization",
+        "parameters": [
+          {
+            "in": "path",
+            "description": "Organization identifier",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "description": "The id of the user invitation.",
+            "name": "invitation_id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "No response was specified"
+          },
+          "204": {
+            "description": "Invitation successfully deleted."
+          },
+          "401": {
+            "description": "Invalid token."
+          },
+          "403": {
+            "description": "Insufficient scope; expected any of: delete:organization_invitations."
+          },
+          "404": {
+            "description": "No organization found by that id."
+          },
+          "429": {
+            "description": "Too many requests. Check the X-RateLimit-Limit, X-RateLimit-Remaining and X-RateLimit-Reset headers."
+          }
+        },
+        "security": [
+          {
+            "jwt": []
+          }
+        ]
+      }
+    },
+    "/api/v2/organizations/{id}/enabled_connections/{connectionId}": {
+      "get": {
+        "operationId": "get_enabled_connections_by_connectionId",
+        "summary": "Get an enabled connection for an organization",
+        "parameters": [
+          {
+            "in": "path",
+            "description": "Organization identifier",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "description": "Connection identifier",
+            "name": "connectionId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Connection successfully retrieved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/get_enabled_connections_by_connectionId_response"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Client is not global."
+          },
+          "403": {
+            "description": "Insufficient scope; expected any of: read:organization_connections."
+          },
+          "429": {
+            "description": "Too many requests. Check the X-RateLimit-Limit, X-RateLimit-Remaining and X-RateLimit-Reset headers."
+          }
+        },
+        "security": [
+          {
+            "jwt": []
+          }
+        ]
+      },
+      "delete": {
+        "operationId": "delete_enabled_connections_by_connectionId",
+        "summary": "Delete connections from an organization",
+        "parameters": [
+          {
+            "in": "path",
+            "description": "Organization identifier",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "description": "Connection identifier",
+            "name": "connectionId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "No response was specified"
+          },
+          "204": {
+            "description": "Connection successfully removed from organization."
+          },
+          "400": {
+            "description": "Invalid request body. The message will vary depending on the cause."
+          },
+          "401": {
+            "description": "Client is not global."
+          },
+          "403": {
+            "description": "Insufficient scope; expected any of: delete:organization_connections."
+          },
+          "429": {
+            "description": "Too many requests. Check the X-RateLimit-Limit, X-RateLimit-Remaining and X-RateLimit-Reset headers."
+          }
+        },
+        "security": [
+          {
+            "jwt": []
+          }
+        ]
+      },
+      "patch": {
+        "operationId": "patch_enabled_connections_by_connectionId",
+        "summary": "Modify an Organizations Connection",
+        "description": "Modify an enabled_connection belonging to an Organization.\n",
+        "parameters": [
+          {
+            "in": "path",
+            "description": "Organization identifier",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "description": "Connection identifier",
+            "name": "connectionId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Organization connection successfully updated.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/patch_enabled_connections_by_connectionId_response"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request body. The message will vary depending on the cause."
+          },
+          "401": {
+            "description": "Client is not global."
+          },
+          "403": {
+            "description": "Insufficient scope; expected any of: update:organization_connections."
+          },
+          "429": {
+            "description": "Too many requests. Check the X-RateLimit-Limit, X-RateLimit-Remaining and X-RateLimit-Reset headers."
+          }
+        },
+        "security": [
+          {
+            "jwt": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/patch_enabled_connections_by_connectionId_body"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/patch_enabled_connections_by_connectionId_body"
+              }
+            }
+          },
+          "required": true
+        }
+      }
+    },
+    "/api/v2/organizations/{id}/members/{user_id}/roles": {
+      "get": {
+        "operationId": "get_organization_member_roles",
+        "summary": "Get the roles assigned to an organization member",
+        "parameters": [
+          {
+            "in": "path",
+            "description": "Organization identifier",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "description": "ID of the user to associate roles with.",
+            "name": "user_id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "description": "Page index of the results to return. First page is 0.",
+            "name": "page",
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 1000
+            }
+          },
+          {
+            "in": "query",
+            "description": "Number of results per page. Defaults to 50.",
+            "name": "per_page",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100
+            }
+          },
+          {
+            "in": "query",
+            "description": "Return results inside an object that contains the total result count (true) or as a direct array of results (false, default).",
+            "name": "include_totals",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Roles successfully retrieved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/get_organization_member_roles_response"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid query string paging options. The message will vary depending on the cause"
+          },
+          "401": {
+            "description": "Client is not global."
+          },
+          "403": {
+            "description": "Insufficient scope; expected any of: read:organization_member_roles."
+          },
+          "429": {
+            "description": "Too many requests. Check the X-RateLimit-Limit, X-RateLimit-Remaining and X-RateLimit-Reset headers."
+          }
+        },
+        "security": [
+          {
+            "jwt": []
+          }
+        ]
+      },
+      "delete": {
+        "operationId": "delete_organization_member_roles",
+        "summary": "Remove one or more roles from a given user in the context of the provided organization",
+        "parameters": [
+          {
+            "in": "path",
+            "description": "Organization identifier",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "description": "User ID of the organization member to remove roles from.",
+            "name": "user_id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "No response was specified"
+          },
+          "204": {
+            "description": "Roles successfully removed from organization member."
+          },
+          "400": {
+            "description": "Invalid request body. The message will vary depending on the cause."
+          },
+          "401": {
+            "description": "Client is not global."
+          },
+          "403": {
+            "description": "Insufficient scope; expected any of: delete:organization_member_roles."
+          },
+          "429": {
+            "description": "Too many requests. Check the X-RateLimit-Limit, X-RateLimit-Remaining and X-RateLimit-Reset headers."
+          }
+        },
+        "security": [
+          {
+            "jwt": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/delete_organization_member_roles_body"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/delete_organization_member_roles_body"
+              }
+            }
+          },
+          "required": true
+        }
+      },
+      "post": {
+        "operationId": "post_organization_member_roles",
+        "summary": "Assign one or more roles to a given user that will be applied in the context of the provided organization",
+        "parameters": [
+          {
+            "in": "path",
+            "description": "Organization identifier",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "description": "ID of the user to associate roles with.",
+            "name": "user_id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "No response was specified"
+          },
+          "204": {
+            "description": "Roles successfully associated with user."
+          },
+          "400": {
+            "description": "Invalid request body. The message will vary depending on the cause."
+          },
+          "401": {
+            "description": "Client is not global."
+          },
+          "403": {
+            "description": "Insufficient scope; expected any of: create:organization_member_roles."
+          },
+          "409": {
+            "description": "No more roles can be assigned to this organization member."
+          },
+          "429": {
+            "description": "Too many requests. Check the X-RateLimit-Limit, X-RateLimit-Remaining and X-RateLimit-Reset headers."
+          }
+        },
+        "security": [
+          {
+            "jwt": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/post_organization_member_roles_body"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/post_organization_member_roles_body"
+              }
+            }
+          },
+          "required": true
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "delete_members_body": {
+        "type": "object",
+        "required": [
+          "members"
+        ],
+        "properties": {
+          "members": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "user-id-with-max-length"
+            },
+            "maxItems": 10,
+            "minItems": 1,
+            "description": "List of user IDs to remove from the organization."
+          }
+        }
+      },
+      "delete_organization_member_roles_body": {
+        "type": "object",
+        "required": [
+          "roles"
+        ],
+        "properties": {
+          "roles": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "role-id"
+            },
+            "uniqueItems": true,
+            "maxItems": 100,
+            "minItems": 1,
+            "description": "List of roles IDs associated with the organization member to remove."
+          }
+        }
+      },
+      "get_enabled_connections_by_connectionId_response": {
+        "type": "object",
+        "properties": {
+          "assign_membership_on_login": {
+            "type": "boolean",
+            "description": "When true, all users that log in with this connection will be automatically granted membership in the organization. When false, users must be granted membership in the organization before logging in with this connection."
+          },
+          "connection": {
+            "$ref": "#/components/schemas/get_enabled_connections_by_connectionId_response_connection"
+          },
+          "connection_id": {
+            "type": "string",
+            "description": "ID of the connection."
+          }
+        }
+      },
+      "get_enabled_connections_by_connectionId_response_connection": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The name of the enabled connection."
+          },
+          "strategy": {
+            "type": "string",
+            "description": "The strategy of the enabled connection."
+          }
+        }
+      },
+      "get_enabled_connections_response": {
+        "type": "object",
+        "properties": {
+          "assign_membership_on_login": {
+            "type": "boolean",
+            "description": "When true, all users that log in with this connection will be automatically granted membership in the organization. When false, users must be granted membership in the organization before logging in with this connection."
+          },
+          "connection": {
+            "$ref": "#/components/schemas/get_enabled_connections_response_connection"
+          },
+          "connection_id": {
+            "type": "string",
+            "description": "ID of the connection."
+          }
+        }
+      },
+      "get_enabled_connections_response_connection": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The name of the enabled connection."
+          },
+          "strategy": {
+            "type": "string",
+            "description": "The strategy of the enabled connection."
+          }
+        }
+      },
+      "get_invitations_by_invitation_id_response": {
+        "type": "object",
+        "properties": {
+          "app_metadata": {
+            "$ref": "#/components/schemas/get_invitations_by_invitation_id_response_app_metadata",
+            "description": "Data related to the user that does affect the application's core functionality."
+          },
+          "client_id": {
+            "type": "string",
+            "format": "client-id",
+            "default": "AaiyAPdpYdesoKnqjj8HJqRn4T5titww",
+            "description": "Auth0 client ID. Used to resolve the application's login initiation endpoint."
+          },
+          "connection_id": {
+            "type": "string",
+            "format": "connection-id",
+            "default": "con_0000000000000001",
+            "description": "The id of the connection to force invitee to authenticate with."
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "default": "2020-08-20T19:10:06.299Z",
+            "description": "The ISO 8601 formatted timestamp representing the creation time of the invitation."
+          },
+          "expires_at": {
+            "type": "string",
+            "format": "date-time",
+            "default": "2020-08-27T19:10:06.299Z",
+            "description": "The ISO 8601 formatted timestamp representing the expiration time of the invitation."
+          },
+          "id": {
+            "type": "string",
+            "format": "user-invitation-id",
+            "default": "uinv_0000000000000001",
+            "description": "The id of the user invitation."
+          },
+          "invitation_url": {
+            "type": "string",
+            "format": "strict-https-uri",
+            "default": "https://mycompany.org/login?invitation=f81dWWYW6gzGGicxT8Ha0txBkGNcAcYr&organization=org_0000000000000001&organization_name=acme",
+            "description": "The invitation url to be send to the invitee."
+          },
+          "invitee": {
+            "$ref": "#/components/schemas/get_invitations_by_invitation_id_response_invitee"
+          },
+          "inviter": {
+            "$ref": "#/components/schemas/get_invitations_by_invitation_id_response_inviter"
+          },
+          "organization_id": {
+            "type": "string",
+            "format": "organization-id",
+            "description": "Organization identifier"
+          },
+          "roles": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "role-id"
+            },
+            "uniqueItems": true,
+            "maxItems": 50,
+            "minItems": 1,
+            "default": [
+              "rol_0000000000000001",
+              "rol_0000000000000002"
+            ],
+            "description": "List of roles IDs to associated with the user."
+          },
+          "ticket_id": {
+            "type": "string",
+            "format": "ticket-id",
+            "description": "The id of the invitation ticket"
+          },
+          "user_metadata": {
+            "$ref": "#/components/schemas/get_invitations_by_invitation_id_response_user_metadata",
+            "description": "Data related to the user that does not affect the application's core functionality."
+          }
+        }
+      },
+      "get_invitations_by_invitation_id_response_app_metadata": {
+        "type": "object",
+        "default": {
+          "plan": "pro"
+        },
+        "description": "Data related to the user that does affect the application's core functionality."
+      },
+      "get_invitations_by_invitation_id_response_invitee": {
+        "type": "object",
+        "required": [
+          "email"
+        ],
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "default": "john.doe@gmail.com",
+            "description": "The invitee's email."
+          }
+        }
+      },
+      "get_invitations_by_invitation_id_response_inviter": {
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "default": "Jane Doe",
+            "description": "The inviter's name."
+          }
+        }
+      },
+      "get_invitations_by_invitation_id_response_user_metadata": {
+        "type": "object",
+        "default": {
+          "hobby": "skydiving"
+        },
+        "description": "Data related to the user that does not affect the application's core functionality."
+      },
+      "get_invitations_response": {
+        "type": "object",
+        "properties": {
+          "app_metadata": {
+            "$ref": "#/components/schemas/get_invitations_response_app_metadata",
+            "description": "Data related to the user that does affect the application's core functionality."
+          },
+          "client_id": {
+            "type": "string",
+            "format": "client-id",
+            "default": "AaiyAPdpYdesoKnqjj8HJqRn4T5titww",
+            "description": "Auth0 client ID. Used to resolve the application's login initiation endpoint."
+          },
+          "connection_id": {
+            "type": "string",
+            "format": "connection-id",
+            "default": "con_0000000000000001",
+            "description": "The id of the connection to force invitee to authenticate with."
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "default": "2020-08-20T19:10:06.299Z",
+            "description": "The ISO 8601 formatted timestamp representing the creation time of the invitation."
+          },
+          "expires_at": {
+            "type": "string",
+            "format": "date-time",
+            "default": "2020-08-27T19:10:06.299Z",
+            "description": "The ISO 8601 formatted timestamp representing the expiration time of the invitation."
+          },
+          "id": {
+            "type": "string",
+            "format": "user-invitation-id",
+            "default": "uinv_0000000000000001",
+            "description": "The id of the user invitation."
+          },
+          "invitation_url": {
+            "type": "string",
+            "format": "strict-https-uri",
+            "default": "https://mycompany.org/login?invitation=f81dWWYW6gzGGicxT8Ha0txBkGNcAcYr&organization=org_0000000000000001&organization_name=acme",
+            "description": "The invitation url to be send to the invitee."
+          },
+          "invitee": {
+            "$ref": "#/components/schemas/get_invitations_response_invitee"
+          },
+          "inviter": {
+            "$ref": "#/components/schemas/get_invitations_response_inviter"
+          },
+          "organization_id": {
+            "type": "string",
+            "format": "organization-id",
+            "description": "Organization identifier"
+          },
+          "roles": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "role-id"
+            },
+            "uniqueItems": true,
+            "maxItems": 50,
+            "minItems": 1,
+            "default": [
+              "rol_0000000000000001",
+              "rol_0000000000000002"
+            ],
+            "description": "List of roles IDs to associated with the user."
+          },
+          "ticket_id": {
+            "type": "string",
+            "format": "ticket-id",
+            "description": "The id of the invitation ticket"
+          },
+          "user_metadata": {
+            "$ref": "#/components/schemas/get_invitations_response_user_metadata",
+            "description": "Data related to the user that does not affect the application's core functionality."
+          }
+        }
+      },
+      "get_invitations_response_app_metadata": {
+        "type": "object",
+        "default": {
+          "plan": "pro"
+        },
+        "description": "Data related to the user that does affect the application's core functionality."
+      },
+      "get_invitations_response_invitee": {
+        "type": "object",
+        "required": [
+          "email"
+        ],
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "default": "john.doe@gmail.com",
+            "description": "The invitee's email."
+          }
+        }
+      },
+      "get_invitations_response_inviter": {
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "default": "Jane Doe",
+            "description": "The inviter's name."
+          }
+        }
+      },
+      "get_invitations_response_user_metadata": {
+        "type": "object",
+        "default": {
+          "hobby": "skydiving"
+        },
+        "description": "Data related to the user that does not affect the application's core functionality."
+      },
+      "get_members_response": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "default": "john.doe@gmail.com",
+            "description": "Email address of this user."
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of this user."
+          },
+          "picture": {
+            "type": "string",
+            "description": "URL to a picture for this user."
+          },
+          "roles": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "ID for this role."
+                },
+                "name": {
+                  "type": "string",
+                  "description": "Name of this role."
+                }
+              }
+            }
+          },
+          "user_id": {
+            "type": "string",
+            "description": "ID of this user."
+          }
+        }
+      },
+      "get_name_by_name_response": {
+        "type": "object",
+        "properties": {
+          "branding": {
+            "$ref": "#/components/schemas/get_name_by_name_response_branding",
+            "description": "Theme defines how to style the login pages"
+          },
+          "display_name": {
+            "type": "string",
+            "default": "Acme Users",
+            "description": "Friendly name of this organization."
+          },
+          "id": {
+            "type": "string",
+            "format": "organization-id",
+            "description": "Organization identifier"
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/get_name_by_name_response_metadata",
+            "description": "Metadata associated with the organization, in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed."
+          },
+          "name": {
+            "type": "string",
+            "format": "organization-name",
+            "default": "organization-1",
+            "description": "The name of this organization."
+          }
+        }
+      },
+      "get_name_by_name_response_branding": {
+        "type": "object",
+        "description": "Theme defines how to style the login pages",
+        "properties": {
+          "colors": {
+            "$ref": "#/components/schemas/get_name_by_name_response_colors",
+            "description": "Color scheme used to customize the login pages"
+          },
+          "logo_url": {
+            "type": "string",
+            "format": "strict-https-uri-or-null",
+            "description": "URL of logo to display on login page"
+          }
+        }
+      },
+      "get_name_by_name_response_colors": {
+        "type": "object",
+        "description": "Color scheme used to customize the login pages",
+        "required": [
+          "primary",
+          "page_background"
+        ],
+        "properties": {
+          "page_background": {
+            "type": "string",
+            "format": "html-color",
+            "description": "HEX Color for background"
+          },
+          "primary": {
+            "type": "string",
+            "format": "html-color",
+            "description": "HEX Color for primary elements"
+          }
+        }
+      },
+      "get_name_by_name_response_metadata": {
+        "type": "object",
+        "description": "Metadata associated with the organization, in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed."
+      },
+      "get_organization_member_roles_response": {
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string",
+            "description": "Description of this role."
+          },
+          "id": {
+            "type": "string",
+            "description": "ID for this role."
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of this role."
+          }
+        }
+      },
+      "get_organizations_by_id_response": {
+        "type": "object",
+        "properties": {
+          "branding": {
+            "$ref": "#/components/schemas/get_organizations_by_id_response_branding",
+            "description": "Theme defines how to style the login pages"
+          },
+          "display_name": {
+            "type": "string",
+            "default": "Acme Users",
+            "description": "Friendly name of this organization."
+          },
+          "id": {
+            "type": "string",
+            "format": "organization-id",
+            "description": "Organization identifier"
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/get_organizations_by_id_response_metadata",
+            "description": "Metadata associated with the organization, in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed."
+          },
+          "name": {
+            "type": "string",
+            "format": "organization-name",
+            "default": "organization-1",
+            "description": "The name of this organization."
+          }
+        }
+      },
+      "get_organizations_by_id_response_branding": {
+        "type": "object",
+        "description": "Theme defines how to style the login pages",
+        "properties": {
+          "colors": {
+            "$ref": "#/components/schemas/get_organizations_by_id_response_colors",
+            "description": "Color scheme used to customize the login pages"
+          },
+          "logo_url": {
+            "type": "string",
+            "format": "strict-https-uri-or-null",
+            "description": "URL of logo to display on login page"
+          }
+        }
+      },
+      "get_organizations_by_id_response_colors": {
+        "type": "object",
+        "description": "Color scheme used to customize the login pages",
+        "required": [
+          "primary",
+          "page_background"
+        ],
+        "properties": {
+          "page_background": {
+            "type": "string",
+            "format": "html-color",
+            "description": "HEX Color for background"
+          },
+          "primary": {
+            "type": "string",
+            "format": "html-color",
+            "description": "HEX Color for primary elements"
+          }
+        }
+      },
+      "get_organizations_by_id_response_metadata": {
+        "type": "object",
+        "description": "Metadata associated with the organization, in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed."
+      },
+      "get_organizations_response": {
+        "type": "object",
+        "properties": {
+          "branding": {
+            "$ref": "#/components/schemas/get_organizations_response_branding",
+            "description": "Theme defines how to style the login pages"
+          },
+          "display_name": {
+            "type": "string",
+            "default": "Acme Users",
+            "description": "Friendly name of this organization."
+          },
+          "id": {
+            "type": "string",
+            "format": "organization-id",
+            "description": "Organization identifier"
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/get_organizations_response_metadata",
+            "description": "Metadata associated with the organization, in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed."
+          },
+          "name": {
+            "type": "string",
+            "format": "organization-name",
+            "default": "organization-1",
+            "description": "The name of this organization."
+          }
+        }
+      },
+      "get_organizations_response_branding": {
+        "type": "object",
+        "description": "Theme defines how to style the login pages",
+        "properties": {
+          "colors": {
+            "$ref": "#/components/schemas/get_organizations_response_colors",
+            "description": "Color scheme used to customize the login pages"
+          },
+          "logo_url": {
+            "type": "string",
+            "format": "strict-https-uri-or-null",
+            "description": "URL of logo to display on login page"
+          }
+        }
+      },
+      "get_organizations_response_colors": {
+        "type": "object",
+        "description": "Color scheme used to customize the login pages",
+        "required": [
+          "primary",
+          "page_background"
+        ],
+        "properties": {
+          "page_background": {
+            "type": "string",
+            "format": "html-color",
+            "description": "HEX Color for background"
+          },
+          "primary": {
+            "type": "string",
+            "format": "html-color",
+            "description": "HEX Color for primary elements"
+          }
+        }
+      },
+      "get_organizations_response_metadata": {
+        "type": "object",
+        "description": "Metadata associated with the organization, in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed."
+      },
+      "patch_enabled_connections_by_connectionId_body": {
+        "type": "object",
+        "required": [
+          "assign_membership_on_login"
+        ],
+        "properties": {
+          "assign_membership_on_login": {
+            "type": "boolean",
+            "description": "When true, all users that log in with this connection will be automatically granted membership in the organization. When false, users must be granted membership in the organization before logging in with this connection."
+          }
+        }
+      },
+      "patch_enabled_connections_by_connectionId_response": {
+        "type": "object",
+        "properties": {
+          "assign_membership_on_login": {
+            "type": "boolean",
+            "description": "When true, all users that log in with this connection will be automatically granted membership in the organization. When false, users must be granted membership in the organization before logging in with this connection."
+          },
+          "connection": {
+            "$ref": "#/components/schemas/patch_enabled_connections_by_connectionId_response_connection"
+          },
+          "connection_id": {
+            "type": "string",
+            "description": "ID of the connection."
+          }
+        }
+      },
+      "patch_enabled_connections_by_connectionId_response_connection": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The name of the enabled connection."
+          },
+          "strategy": {
+            "type": "string",
+            "description": "The strategy of the enabled connection."
+          }
+        }
+      },
+      "patch_organizations_by_id_body": {
+        "type": "object",
+        "properties": {
+          "branding": {
+            "$ref": "#/components/schemas/patch_organizations_by_id_body_branding",
+            "description": "Theme defines how to style the login pages"
+          },
+          "display_name": {
+            "type": "string",
+            "default": "Acme Users",
+            "description": "Friendly name of this organization."
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/patch_organizations_by_id_body_metadata",
+            "description": "Metadata associated with the organization, in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed."
+          },
+          "name": {
+            "type": "string",
+            "format": "organization-name",
+            "default": "organization-1",
+            "description": "The name of this organization."
+          }
+        }
+      },
+      "patch_organizations_by_id_body_branding": {
+        "type": "object",
+        "description": "Theme defines how to style the login pages",
+        "properties": {
+          "colors": {
+            "$ref": "#/components/schemas/patch_organizations_by_id_body_colors",
+            "description": "Color scheme used to customize the login pages"
+          },
+          "logo_url": {
+            "type": "string",
+            "format": "strict-https-uri-or-null",
+            "description": "URL of logo to display on login page"
+          }
+        }
+      },
+      "patch_organizations_by_id_body_colors": {
+        "type": "object",
+        "description": "Color scheme used to customize the login pages",
+        "required": [
+          "primary",
+          "page_background"
+        ],
+        "properties": {
+          "page_background": {
+            "type": "string",
+            "format": "html-color",
+            "description": "HEX Color for background"
+          },
+          "primary": {
+            "type": "string",
+            "format": "html-color",
+            "description": "HEX Color for primary elements"
+          }
+        }
+      },
+      "patch_organizations_by_id_body_metadata": {
+        "type": "object",
+        "description": "Metadata associated with the organization, in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed."
+      },
+      "patch_organizations_by_id_response": {
+        "type": "object",
+        "properties": {
+          "branding": {
+            "$ref": "#/components/schemas/patch_organizations_by_id_response_branding",
+            "description": "Theme defines how to style the login pages"
+          },
+          "display_name": {
+            "type": "string",
+            "default": "Acme Users",
+            "description": "Friendly name of this organization."
+          },
+          "id": {
+            "type": "string",
+            "format": "organization-id",
+            "description": "Organization identifier"
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/patch_organizations_by_id_response_metadata",
+            "description": "Metadata associated with the organization, in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed."
+          },
+          "name": {
+            "type": "string",
+            "format": "organization-name",
+            "default": "organization-1",
+            "description": "The name of this organization."
+          }
+        }
+      },
+      "patch_organizations_by_id_response_branding": {
+        "type": "object",
+        "description": "Theme defines how to style the login pages",
+        "properties": {
+          "colors": {
+            "$ref": "#/components/schemas/patch_organizations_by_id_response_colors",
+            "description": "Color scheme used to customize the login pages"
+          },
+          "logo_url": {
+            "type": "string",
+            "format": "strict-https-uri-or-null",
+            "description": "URL of logo to display on login page"
+          }
+        }
+      },
+      "patch_organizations_by_id_response_colors": {
+        "type": "object",
+        "description": "Color scheme used to customize the login pages",
+        "required": [
+          "primary",
+          "page_background"
+        ],
+        "properties": {
+          "page_background": {
+            "type": "string",
+            "format": "html-color",
+            "description": "HEX Color for background"
+          },
+          "primary": {
+            "type": "string",
+            "format": "html-color",
+            "description": "HEX Color for primary elements"
+          }
+        }
+      },
+      "patch_organizations_by_id_response_metadata": {
+        "type": "object",
+        "description": "Metadata associated with the organization, in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed."
+      },
+      "post_enabled_connections_body": {
+        "type": "object",
+        "required": [
+          "connection_id"
+        ],
+        "properties": {
+          "assign_membership_on_login": {
+            "type": "boolean",
+            "description": "When true, all users that log in with this connection will be automatically granted membership in the organization. When false, users must be granted membership in the organization before logging in with this connection."
+          },
+          "connection_id": {
+            "type": "string",
+            "format": "connection-id",
+            "description": "Single connection ID to add to the organization."
+          }
+        }
+      },
+      "post_enabled_connections_response": {
+        "type": "object",
+        "properties": {
+          "assign_membership_on_login": {
+            "type": "boolean",
+            "description": "When true, all users that log in with this connection will be automatically granted membership in the organization. When false, users must be granted membership in the organization before logging in with this connection."
+          },
+          "connection": {
+            "$ref": "#/components/schemas/post_enabled_connections_response_connection"
+          },
+          "connection_id": {
+            "type": "string",
+            "description": "ID of the connection."
+          }
+        }
+      },
+      "post_enabled_connections_response_connection": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The name of the enabled connection."
+          },
+          "strategy": {
+            "type": "string",
+            "description": "The strategy of the enabled connection."
+          }
+        }
+      },
+      "post_invitations_body": {
+        "type": "object",
+        "required": [
+          "inviter",
+          "invitee",
+          "client_id"
+        ],
+        "properties": {
+          "app_metadata": {
+            "$ref": "#/components/schemas/post_invitations_body_app_metadata",
+            "description": "Data related to the user that does affect the application's core functionality."
+          },
+          "client_id": {
+            "type": "string",
+            "format": "client-id",
+            "default": "AaiyAPdpYdesoKnqjj8HJqRn4T5titww",
+            "description": "Auth0 client ID. Used to resolve the application's login initiation endpoint."
+          },
+          "connection_id": {
+            "type": "string",
+            "format": "connection-id",
+            "default": "con_0000000000000001",
+            "description": "The id of the connection to force invitee to authenticate with."
+          },
+          "invitee": {
+            "$ref": "#/components/schemas/post_invitations_body_invitee"
+          },
+          "inviter": {
+            "$ref": "#/components/schemas/post_invitations_body_inviter"
+          },
+          "roles": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "role-id"
+            },
+            "uniqueItems": true,
+            "maxItems": 50,
+            "minItems": 1,
+            "default": [
+              "rol_0000000000000001",
+              "rol_0000000000000002"
+            ],
+            "description": "List of roles IDs to associated with the user."
+          },
+          "send_invitation_email": {
+            "type": "boolean",
+            "default": true,
+            "description": "Whether the user will receive an invitation email (true) or no email (false), true by default"
+          },
+          "ttl_sec": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 2592000,
+            "default": 604800,
+            "description": "Number of seconds for which the invitation is valid before expiration. If unspecified or set to 0, this value defaults to 604800 seconds (7 days). Max value: 2592000 seconds (30 days)."
+          },
+          "user_metadata": {
+            "$ref": "#/components/schemas/post_invitations_body_user_metadata",
+            "description": "Data related to the user that does not affect the application's core functionality."
+          }
+        }
+      },
+      "post_invitations_body_app_metadata": {
+        "type": "object",
+        "default": {
+          "plan": "pro"
+        },
+        "description": "Data related to the user that does affect the application's core functionality."
+      },
+      "post_invitations_body_invitee": {
+        "type": "object",
+        "required": [
+          "email"
+        ],
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "default": "john.doe@gmail.com",
+            "description": "The invitee's email."
+          }
+        }
+      },
+      "post_invitations_body_inviter": {
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "default": "Jane Doe",
+            "description": "The inviter's name."
+          }
+        }
+      },
+      "post_invitations_body_user_metadata": {
+        "type": "object",
+        "default": {
+          "hobby": "skydiving"
+        },
+        "description": "Data related to the user that does not affect the application's core functionality."
+      },
+      "post_invitations_response": {
+        "type": "object",
+        "properties": {
+          "app_metadata": {
+            "$ref": "#/components/schemas/post_invitations_response_app_metadata",
+            "description": "Data related to the user that does affect the application's core functionality."
+          },
+          "client_id": {
+            "type": "string",
+            "format": "client-id",
+            "default": "AaiyAPdpYdesoKnqjj8HJqRn4T5titww",
+            "description": "Auth0 client ID. Used to resolve the application's login initiation endpoint."
+          },
+          "connection_id": {
+            "type": "string",
+            "format": "connection-id",
+            "default": "con_0000000000000001",
+            "description": "The id of the connection to force invitee to authenticate with."
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "default": "2020-08-20T19:10:06.299Z",
+            "description": "The ISO 8601 formatted timestamp representing the creation time of the invitation."
+          },
+          "expires_at": {
+            "type": "string",
+            "format": "date-time",
+            "default": "2020-08-27T19:10:06.299Z",
+            "description": "The ISO 8601 formatted timestamp representing the expiration time of the invitation."
+          },
+          "id": {
+            "type": "string",
+            "format": "user-invitation-id",
+            "default": "uinv_0000000000000001",
+            "description": "The id of the user invitation."
+          },
+          "invitation_url": {
+            "type": "string",
+            "format": "strict-https-uri",
+            "default": "https://mycompany.org/login?invitation=f81dWWYW6gzGGicxT8Ha0txBkGNcAcYr&organization=org_0000000000000001&organization_name=acme",
+            "description": "The invitation url to be send to the invitee."
+          },
+          "invitee": {
+            "$ref": "#/components/schemas/post_invitations_response_invitee"
+          },
+          "inviter": {
+            "$ref": "#/components/schemas/post_invitations_response_inviter"
+          },
+          "organization_id": {
+            "type": "string",
+            "format": "organization-id",
+            "description": "Organization identifier"
+          },
+          "roles": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "role-id"
+            },
+            "uniqueItems": true,
+            "maxItems": 50,
+            "minItems": 1,
+            "default": [
+              "rol_0000000000000001",
+              "rol_0000000000000002"
+            ],
+            "description": "List of roles IDs to associated with the user."
+          },
+          "ticket_id": {
+            "type": "string",
+            "format": "ticket-id",
+            "description": "The id of the invitation ticket"
+          },
+          "user_metadata": {
+            "$ref": "#/components/schemas/post_invitations_response_user_metadata",
+            "description": "Data related to the user that does not affect the application's core functionality."
+          }
+        }
+      },
+      "post_invitations_response_app_metadata": {
+        "type": "object",
+        "default": {
+          "plan": "pro"
+        },
+        "description": "Data related to the user that does affect the application's core functionality."
+      },
+      "post_invitations_response_invitee": {
+        "type": "object",
+        "required": [
+          "email"
+        ],
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "default": "john.doe@gmail.com",
+            "description": "The invitee's email."
+          }
+        }
+      },
+      "post_invitations_response_inviter": {
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "default": "Jane Doe",
+            "description": "The inviter's name."
+          }
+        }
+      },
+      "post_invitations_response_user_metadata": {
+        "type": "object",
+        "default": {
+          "hobby": "skydiving"
+        },
+        "description": "Data related to the user that does not affect the application's core functionality."
+      },
+      "post_members_body": {
+        "type": "object",
+        "required": [
+          "members"
+        ],
+        "properties": {
+          "members": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "user-id-with-max-length"
+            },
+            "maxItems": 10,
+            "minItems": 1,
+            "description": "List of user IDs to add to the organization as members."
+          }
+        }
+      },
+      "post_organization_member_roles_body": {
+        "type": "object",
+        "required": [
+          "roles"
+        ],
+        "properties": {
+          "roles": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "role-id"
+            },
+            "uniqueItems": true,
+            "maxItems": 100,
+            "minItems": 1,
+            "description": "List of roles IDs to associated with the user."
+          }
+        }
+      },
+      "post_organizations_body": {
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "branding": {
+            "$ref": "#/components/schemas/post_organizations_body_branding",
+            "description": "Theme defines how to style the login pages"
+          },
+          "display_name": {
+            "type": "string",
+            "default": "Acme Users",
+            "description": "Friendly name of this organization."
+          },
+          "enabled_connections": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "description": "Connection to be added to the organization.",
+              "required": [
+                "connection_id"
+              ],
+              "properties": {
+                "assign_membership_on_login": {
+                  "type": "boolean",
+                  "description": "When true, all users that log in with this connection will be automatically granted membership in the organization. When false, users must be granted membership in the organization before logging in with this connection."
+                },
+                "connection_id": {
+                  "type": "string",
+                  "description": "ID of the connection."
+                }
+              }
+            },
+            "maxItems": 10,
+            "description": "Connections that will be enabled for this organization. See POST enabled_connections endpoint for the object format. (Max of 10 connections allowed)"
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/post_organizations_body_metadata",
+            "description": "Metadata associated with the organization, in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed."
+          },
+          "name": {
+            "type": "string",
+            "format": "organization-name",
+            "default": "organization-1",
+            "description": "The name of this organization."
+          }
+        }
+      },
+      "post_organizations_body_branding": {
+        "type": "object",
+        "description": "Theme defines how to style the login pages",
+        "properties": {
+          "colors": {
+            "$ref": "#/components/schemas/post_organizations_body_colors",
+            "description": "Color scheme used to customize the login pages"
+          },
+          "logo_url": {
+            "type": "string",
+            "format": "strict-https-uri-or-null",
+            "description": "URL of logo to display on login page"
+          }
+        }
+      },
+      "post_organizations_body_colors": {
+        "type": "object",
+        "description": "Color scheme used to customize the login pages",
+        "required": [
+          "primary",
+          "page_background"
+        ],
+        "properties": {
+          "page_background": {
+            "type": "string",
+            "format": "html-color",
+            "description": "HEX Color for background"
+          },
+          "primary": {
+            "type": "string",
+            "format": "html-color",
+            "description": "HEX Color for primary elements"
+          }
+        }
+      },
+      "post_organizations_body_metadata": {
+        "type": "object",
+        "description": "Metadata associated with the organization, in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed."
+      },
+      "post_organizations_response": {
+        "type": "object",
+        "properties": {
+          "branding": {
+            "$ref": "#/components/schemas/post_organizations_response_branding",
+            "description": "Theme defines how to style the login pages"
+          },
+          "display_name": {
+            "type": "string",
+            "default": "Acme Users",
+            "description": "Friendly name of this organization."
+          },
+          "id": {
+            "type": "string",
+            "format": "organization-id",
+            "description": "Organization identifier"
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/post_organizations_response_metadata",
+            "description": "Metadata associated with the organization, in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed."
+          },
+          "name": {
+            "type": "string",
+            "format": "organization-name",
+            "default": "organization-1",
+            "description": "The name of this organization."
+          }
+        }
+      },
+      "post_organizations_response_branding": {
+        "type": "object",
+        "description": "Theme defines how to style the login pages",
+        "properties": {
+          "colors": {
+            "$ref": "#/components/schemas/post_organizations_response_colors",
+            "description": "Color scheme used to customize the login pages"
+          },
+          "logo_url": {
+            "type": "string",
+            "format": "strict-https-uri-or-null",
+            "description": "URL of logo to display on login page"
+          }
+        }
+      },
+      "post_organizations_response_colors": {
+        "type": "object",
+        "description": "Color scheme used to customize the login pages",
+        "required": [
+          "primary",
+          "page_background"
+        ],
+        "properties": {
+          "page_background": {
+            "type": "string",
+            "format": "html-color",
+            "description": "HEX Color for background"
+          },
+          "primary": {
+            "type": "string",
+            "format": "html-color",
+            "description": "HEX Color for primary elements"
+          }
+        }
+      },
+      "post_organizations_response_metadata": {
+        "type": "object",
+        "description": "Metadata associated with the organization, in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed."
+      }
+    }
+  }
+}
